@@ -1,0 +1,12 @@
+{% include 'polls/base.html' %}
+
+<div style="padding: 70px;">
+
+    <form action="." method="post">{% csrf_token %}
+        {{ name_form.name.label_tag }}
+        {{ name_form.name }}
+        {{ name_form.name.errors }}
+        <button type="submit">Submit</button>
+    </form>
+
+</div>
