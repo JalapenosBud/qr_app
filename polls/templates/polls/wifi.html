@@ -1,0 +1,10 @@
+{% include 'polls/base.html' %}
+
+<div style="padding: 70px;">
+
+    <form action="." method="post">{% csrf_token %}
+       
+        <button type="submit">Generate</button>
+    </form>
+    <img src="/media/code.png">
+</div>

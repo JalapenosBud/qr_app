@@ -34,5 +34,5 @@ class FileHandler(models.Model):
         #print(qr)
         img = qr.make_image(fill_color="black", back_color="white")
        #print(img)
-        img.save("C:\\Users\\Jalap\\Documents\\QRCODE\\QRCODE\\media\\firstqr.png")
+        img.save("\\media\\firstqr.png")
 
