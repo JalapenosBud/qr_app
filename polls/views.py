@@ -6,10 +6,21 @@ from pathlib import Path
 from .models import FileHandler
 
 def index(request):
-   
+    name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=True)
     context = {}
-    
-    return render(request, 'polls/index.html', context)
+      
+    if request.method == 'POST':
+        if name_form.is_valid():
+            # do something
+            #FileHandler().savenewfile(name_form.cleaned_data['name'])
+            FileHandler().generateQR(name_form.cleaned_data['name'])
+            #print("running this")
+        #return render(request, 'polls/index.html', {'name_form': name_form})
+    else: 
+        name_form = NameForm()
+    return render(request, 'polls/index.html', {'name_form': name_form})
+
+   # return render(request, 'polls/index.html', context)
 
 
 def weblink(request):
@@ -19,9 +30,12 @@ def weblink(request):
         if name_form.is_valid():
             # do something
             FileHandler().savenewfile(name_form.cleaned_data['name'])
-        return render(request, 'polls/weblink.html', {'name_form': name_form})
+            FileHandler().generateQR(name_form.cleaned_data['name'])
+            #print("running this")
+        #return render(request, 'polls/weblink.html', {'name_form': name_form})
     else: 
-        return render(request, 'polls/weblink.html', context)
+        name_form = NameForm()
+    return render(request, 'polls/weblink.html', {'name_form': name_form})
 
 def loadfile(request):
         if request.method == 'GET':
@@ -30,4 +44,5 @@ def loadfile(request):
                 data_file = open(file_path , 'r')
                 data = data_file.read()
                 context = {'rooms': data}
+                FileHandler().generateQR(data)
         return render(request, 'polls/loadfile.html', context)
