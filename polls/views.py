@@ -11,6 +11,7 @@ from .models import FileHandler
 from .forms import SmsForm, VCard
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from QRCODE.settings import BASE_DIR
 def index(request):
     name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=True)
     context = {}
@@ -61,6 +62,7 @@ def loadfile(request):
 
 def sms(request):
         context = {}
+        file_path = os.path.join(BASE_DIR, 'media/')
         name_form = NameForm(request.POST or None, initial={'textmessage': 'whatever'}, use_required_attribute=False)
 
         smsform = SmsForm()
@@ -69,7 +71,7 @@ def sms(request):
         #TODO: take input fields
         if request.method == 'POST':
                 QRCode = pyqrcode.create(F'sms:+4530563053:hello%20rick%20and%20morty%20fanclub.')
-                QRCode.png('~/Documents/pythonstuff/qr_app/media/code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
+                QRCode.png(file_path + 'code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
                 
                 return render(request, 'polls/sms.html', context)
         else:
