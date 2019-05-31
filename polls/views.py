@@ -60,16 +60,21 @@ def loadfile(request):
                 return render(request, 'polls/loadfile.html', context)
 
 def sms(request):
-        name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=False)
+        context = {}
+        name_form = NameForm(request.POST or None, initial={'textmessage': 'whatever'}, use_required_attribute=False)
 
         smsform = SmsForm()
-        #TODO: change name to textmessage
-        smsform.name = request.POST.get('name')
         smsform.number = request.POST.get('number')
+        smsform.name = request.POST.get('textmessage')
         #TODO: take input fields
-        #QRCode = pyqrcode.create(F'sms:+4530563053:wubba%20lubba%20wub%20wub%20ballsack.')
-        context = {}
-        return render(request, 'polls/sms.html', {'name_form': name_form})
+        if request.method == 'POST':
+                QRCode = pyqrcode.create(F'sms:+4530563053:hello%20rick%20and%20morty%20fanclub.')
+                QRCode.png('~/Documents/pythonstuff/qr_app/media/code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
+                
+                return render(request, 'polls/sms.html', context)
+        else:
+                return render(request, 'polls/sms.html', context)
+        #return render(request, 'polls/sms.html', {'name_form': name_form})
 
 def wifi(request):
         context = {}
@@ -81,9 +86,9 @@ def wifi(request):
                 Wifi_Password = 'FooBarBaz'
                 QRCode = pyqrcode.create(F'WIFI:T:{Wifi_Protocol};S:{Wifi_Name};P:{Wifi_Password};;')
                 #TODO: ret path til media folder
-                QRCode.png('C:\\Users\\Jalap\\Documents\\QRCODE\\QRCODE\\media\\code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
+                QRCode.png('~/Documents/pythonstuff/qr_app/media\\media\\code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
                 #path = default_storage.save('/media/', ContentFile(QRCode))
-                QRCode.show()
+                #QRCode.show()
                 return render(request, 'polls/wifi.html', context)
         else:
                 return render(request, 'polls/wifi.html', context)
