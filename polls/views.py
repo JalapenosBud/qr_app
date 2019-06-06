@@ -29,22 +29,7 @@ def loadfile(request):
         return render(request, 'polls/loadfile.html', context)
 
 def sms(request):
-        context = {}
-        file_path = os.path.join(BASE_DIR, 'media/')
-        name_form = NameForm(request.POST or None, initial={'textmessage': 'whatever'}, use_required_attribute=False)
-
-        smsform = SmsForm()
-        smsform.number = request.POST.get('number')
-        smsform.name = request.POST.get('textmessage')
-        #TODO: take input fields
-        if request.method == 'POST':
-                QRCode = pyqrcode.create(F'sms:+4530563053:hello%20rick%20and%20morty%20fanclub.')
-                QRCode.png(file_path + 'code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
-                
-                return render(request, 'polls/sms.html', context)
-        else:
-                return render(request, 'polls/sms.html', context)
-        #return render(request, 'polls/sms.html', {'name_form': name_form})
+        pass
 
 def wifi(request):
         context = {}

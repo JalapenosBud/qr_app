@@ -5,13 +5,4 @@ from django.db import models
 class NameForm(forms.Form):
     name = forms.CharField(max_length=255)
 
-class SmsForm(models.Model):
-    name = models.CharField(max_length = 26)
-    number = models.CharField(max_length=8)
-
-class VCard(models.Model):
-    N = models.CharField(max_length = 20)
-    FN = models.CharField(max_length= 50)
-    EMAIL = models.EmailField(max_length=40)
-    TEL = models.CharField(max_length=8)
     
