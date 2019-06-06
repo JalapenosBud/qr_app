@@ -2,10 +2,14 @@
 
 <div style="padding: 70px;">
 
-    <form action="." method="post">{% csrf_token %}
-       
-        {{ name_form }}
+    <form action="." method="post">
+        {% csrf_token %}
+        <label>WEBLINK:</label>
+        <input class="form-control" type="text" name="weblink" style="width: 30%"></input>
         <button type="submit">Submit</button>
     </form>
-<img src="/media/firstqr.png">
+    
+<img src="/media/code.png">
+
+
 </div>

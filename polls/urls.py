@@ -7,8 +7,8 @@ app_name = 'polls'
 urlpatterns = [
     # ex: /polls/
     path('', views.index, name='index'),
-    path('loadfile/', views.loadfile, name='loadfile'),
     path('weblink/', views.weblink, name='weblink'),
     path('sms/', views.sms, name='sms'),
-    path('wifi/', views.wifi, name='wifi')
+    path('wifi/', views.wifi, name='wifi'),
+    path('getone/<str:type>/<str:id>/', views.getOne, name='getone')
 ]

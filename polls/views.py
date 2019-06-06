@@ -1,96 +1,76 @@
-# views.py
 import os
 import vobject
 import pyqrcode
 import png
 
 from django.shortcuts import render
-from .forms import NameForm
 from pathlib import Path
-from .models import FileHandler
-from .forms import SmsForm, VCard
+from .models import SmsModel, WifiModel, WeblinkModel
 from django.core.files.storage import default_storage
+from django.shortcuts import render, get_object_or_404
 from django.core.files.base import ContentFile
+from django.http import HttpResponseBadRequest
 from QRCODE.settings import BASE_DIR
+
+
 def index(request):
-    name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=True)
-    context = {}
-      
-    if request.method == 'POST':
-        if name_form.is_valid():
-            # do something
-            #FileHandler().savenewfile(name_form.cleaned_data['name'])
-            FileHandler().generateQR(name_form.cleaned_data['name'])
-            #print("running this")
-        #return render(request, 'polls/index.html', {'name_form': name_form})
-    else: 
-        name_form = NameForm()
-    return render(request, 'polls/index.html', {'name_form': name_form})
-
-   # return render(request, 'polls/index.html', context)
-
-
+    #context = {}
+    return render(request, 'polls/index.html')
+    
+    
 def weblink(request):
-    name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=False)
-   
-    context = {}
-    if request.method == 'POST':
-        if name_form.is_valid():
-            # do something
-            FileHandler().savenewfile(name_form.cleaned_data['name'])
-            FileHandler().generateQR(name_form.cleaned_data['name'])
-            #print("running this")
-        #return render(request, 'polls/weblink.html', {'name_form': name_form})
-    else: 
-        name_form = NameForm()
-    return render(request, 'polls/weblink.html', {'name_form': name_form})
-
-def loadfile(request):
-        
-        context = {}
+        if request.method == 'GET':
+                return render(request, "polls/weblink.html")
 
         if request.method == 'POST':
-                module_dir = os.path.dirname(Path(__file__).resolve().parent)
-                file_path = os.path.join(module_dir, 'file.txt')   #full path to text.
-                data_file = open(file_path , 'r')
-                data = data_file.read()
-                context = {'rooms': data}
-                FileHandler().generateQR(data)
-                return render(request, 'polls/loadfile.html', context)
-        else:
-                return render(request, 'polls/loadfile.html', context)
+                model = WeblinkModel()
+                model.create(request.POST["weblink"])
+                #model.weblink = request.POST["weblink"]
+                #database save
+                model.save()
+                        #load methode kaldes her ()
+                return render(request, 'polls/weblink.html')  
+        return HttpResponseBadRequest()
 
-def sms(request):
-        context = {}
-        file_path = os.path.join(BASE_DIR, 'media/')
-        name_form = NameForm(request.POST or None, initial={'textmessage': 'whatever'}, use_required_attribute=False)
+def loadWeblink(request):
+        if request.method == 'GET':
+                print("HET")
+                #model = WeblinkModel()
+                #model.load("loadfile")
+                return render(request, "polls/getone.html")
 
-        smsform = SmsForm()
-        smsform.number = request.POST.get('number')
-        smsform.name = request.POST.get('textmessage')
-        #TODO: take input fields
-        if request.method == 'POST':
-                QRCode = pyqrcode.create(F'sms:+4530563053:hello%20rick%20and%20morty%20fanclub.')
-                QRCode.png(file_path + 'code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
-                
-                return render(request, 'polls/sms.html', context)
-        else:
-                return render(request, 'polls/sms.html', context)
-        #return render(request, 'polls/sms.html', {'name_form': name_form})
 
 def wifi(request):
-        context = {}
+        if request.method == 'GET':
+                return render(request, "polls/wifi.html")
+
         if request.method == 'POST':
-                
-                #TODO: input fields in html for wifi info
-                Wifi_Name = 'WiFimodem-94F5'
-                Wifi_Protocol = 'WPA/WPA2'
-                Wifi_Password = 'FooBarBaz'
-                QRCode = pyqrcode.create(F'WIFI:T:{Wifi_Protocol};S:{Wifi_Name};P:{Wifi_Password};;')
-                #TODO: ret path til media folder
-                QRCode.png('~/Documents/pythonstuff/qr_app/media\\media\\code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xff])
-                #path = default_storage.save('/media/', ContentFile(QRCode))
-                #QRCode.show()
-                return render(request, 'polls/wifi.html', context)
-        else:
-                return render(request, 'polls/wifi.html', context)
+                model = WifiModel()
+                model.create(request.POST["wifi-name"], request.POST["wifi-pass"],request.POST["wifi-auth"])
+                #model.wifi = request.POST["wifi"]
+                model.save()
+                return render(request, 'polls/wifi.html')
+        return HttpResponseBadRequest() 
+
+
+def sms(request):
+        if request.method == 'GET':
+                return render(request, "polls/sms.html")
+
+        if request.method == 'POST':
+                model = SmsModel()
+                model.create(request.POST['textmessage'],request.POST['number'])
+                #model.wifi = request.POST["sms"]
+                model.save()
+                return render(request,'polls/sms.html')
+        
+        return HttpResponseBadRequest() 
+
+
+def getOne(request, type, id):
+        #jeres detaljer er her omkring den specfikke QR Code.
+        qr = get_object_or_404(type, pk=id)
+        if request.method == 'GET':
+                context = {"qr": qr, "type": type}
+                #"getone.html" er ikke lavet men den skal udfylde 
+                return render(request, "polls/getone.html", context)
