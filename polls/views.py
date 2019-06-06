@@ -12,53 +12,21 @@ from .forms import SmsForm, VCard
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from QRCODE.settings import BASE_DIR
-def index(request):
-    name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=True)
-    context = {}
-      
-    if request.method == 'POST':
-        if name_form.is_valid():
-            # do something
-            #FileHandler().savenewfile(name_form.cleaned_data['name'])
-            FileHandler().generateQR(name_form.cleaned_data['name'])
-            #print("running this")
-        #return render(request, 'polls/index.html', {'name_form': name_form})
-    else: 
-        name_form = NameForm()
-    return render(request, 'polls/index.html', {'name_form': name_form})
 
-   # return render(request, 'polls/index.html', context)
+
+def index(request):
+        pass
 
 
 def weblink(request):
-    name_form = NameForm(request.POST or None, initial={'name': 'whatever'}, use_required_attribute=False)
-   
     context = {}
-    if request.method == 'POST':
-        if name_form.is_valid():
-            # do something
-            FileHandler().savenewfile(name_form.cleaned_data['name'])
-            FileHandler().generateQR(name_form.cleaned_data['name'])
-            #print("running this")
-        #return render(request, 'polls/weblink.html', {'name_form': name_form})
-    else: 
-        name_form = NameForm()
-    return render(request, 'polls/weblink.html', {'name_form': name_form})
+
+    return render(request, 'polls/weblink.html',context)
 
 def loadfile(request):
         
         context = {}
-
-        if request.method == 'POST':
-                module_dir = os.path.dirname(Path(__file__).resolve().parent)
-                file_path = os.path.join(module_dir, 'file.txt')   #full path to text.
-                data_file = open(file_path , 'r')
-                data = data_file.read()
-                context = {'rooms': data}
-                FileHandler().generateQR(data)
-                return render(request, 'polls/loadfile.html', context)
-        else:
-                return render(request, 'polls/loadfile.html', context)
+        return render(request, 'polls/loadfile.html', context)
 
 def sms(request):
         context = {}
