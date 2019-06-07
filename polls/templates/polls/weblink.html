@@ -5,13 +5,15 @@
     <form action="." method="post">
         {% csrf_token %}
         <label>WEBLINK:</label>
-        <input class="form-control" type="text" name="weblink" style="width: 30%"></input>
-        <button type="submit" name="_load">Load</button>
-        <button type="submit" name "_generate">Submit</button>
+        <input class="form-control" type="text" name="weblink" value="{{weblink}}"style="width: 30%"></input>
+        <button type="submit" value="Load" name="_load">Load</button>
+        <button type="submit" value="Generate" name="_generate">Generate</button>
     </form>
-    
-<img src="/media/code.png">
-
-<h1>weblink for {{weblink}}</h1>
-
+    <img src="/media/code.png">
+   <!-- {% if weblink %}
+        <img src="/media/code.png">
+    {% else %}
+        <p>no image chosen <p>
+    {% endif %}
+    -->
 </div>

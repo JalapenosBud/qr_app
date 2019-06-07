@@ -26,28 +26,21 @@ def weblink(request):
         if request.method == 'GET':
                 return render(request, "polls/weblink.html")
 
-        if request.POST:
+        if request.method == 'POST':
                 if '_load' in request.POST:
-                        #do_load()
-                        print('load')
                         try:
                                 web = WeblinkModel.objects.all().first()
-                                #order_by('weblink').first()
                         except:
                                 raise Http404('Requested weblink model not found')
-                        #my_weblink = web.weblink.
-                       # template = get_template('weblink.html')
-                        #getfirst = web.order_by('weblink').first()
                         context = {'weblink':web}
-                        print(context)
-                        #output = type.render(variables)
                         return render(request, 'polls/weblink.html', context)
-                elif '_generate' in request.POST:
-                        print('generate')
+
+                if '_generate' in request.POST:
                         model = WeblinkModel()
                         model.create(request.POST["weblink"])# model.weblink = request.POST["weblink"]# database save
                         model.save()# load methode kaldes her()
                         return render(request, 'polls/weblink.html')
+                        
                 return render(request, 'polls/weblink.html')    
         return HttpResponseBadRequest()
 
