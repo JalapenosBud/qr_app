@@ -3,12 +3,12 @@
 <div style="padding: 70px;">
 
     <form action="." method="post">{% csrf_token %}
-        <label>WEBLINK:</label>
-        <input class="form-control" type="text" name="weblink" style="width: 30%"></input>
-        <label>WEBLINK:</label>
-        <input class="form-control" type="text" name="weblink" style="width: 30%"></input>
-        <label>WEBLINK:</label>
-        <input class="form-control" type="text" name="weblink" style="width: 30%"></input>
+        <label>Wifi Name:</label>
+        <input class="form-control" type="text" name="wifi-name" style="width: 30%"></input>
+        <label>Wifi protocol:</label>
+        <input class="form-control" type="text" name="wifi-auth" style="width: 30%"></input>
+        <label>wifi password:</label>
+        <input class="form-control" type="text" name="wifi-pass" style="width: 30%"></input>
         <button type="submit">Generate</button>
     </form>
     <img src="/media/code.png">

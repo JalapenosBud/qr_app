@@ -67,5 +67,8 @@ def generate(input):
         qr.add_data(input)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
-        img.save("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\code.png")
+        #angelo
+        img.save("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png")
 
+        #kasper
+        #img.save("C:\\Users\\Jalap\\Skynet\\qr_app\\qr_app\\media\\code.png")
