@@ -12,8 +12,10 @@ from django.core.files.base import ContentFile
 from django.http import HttpResponseBadRequest
 from QRCODE.settings import BASE_DIR
 
+from django.template.loader import TemplateDoesNotExist
+
 from django.http import HttpResponse, Http404
-from django.contrib.auth.models import User
+from .models import WeblinkModel
 
 def index(request):
     #context = {}
@@ -27,10 +29,26 @@ def weblink(request):
         if request.POST:
                 if '_load' in request.POST:
                         #do_load()
-                        pass
+                        print('load')
+                        try:
+                                web = WeblinkModel.objects.all().first()
+                                #order_by('weblink').first()
+                        except:
+                                raise Http404('Requested weblink model not found')
+                        #my_weblink = web.weblink.
+                       # template = get_template('weblink.html')
+                        #getfirst = web.order_by('weblink').first()
+                        context = {'weblink':web}
+                        print(context)
+                        #output = type.render(variables)
+                        return render(request, 'polls/weblink.html', context)
                 elif '_generate' in request.POST:
-                        do_generate(request)
-                return render(request, 'polls/weblink.html')  
+                        print('generate')
+                        model = WeblinkModel()
+                        model.create(request.POST["weblink"])# model.weblink = request.POST["weblink"]# database save
+                        model.save()# load methode kaldes her()
+                        return render(request, 'polls/weblink.html')
+                return render(request, 'polls/weblink.html')    
         return HttpResponseBadRequest()
 
 def loadWeblink(request):
@@ -80,12 +98,6 @@ def showImage(request):
         link = "C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png"
         if request.method == 'GET':
                 pass
-
-
-def do_generate(request):
-        model = WeblinkModel()
-        model.create(request.POST["weblink"])# model.weblink = request.POST["weblink"]# database save
-        model.save()# load methode kaldes her()
 
 #def image_to_html(image):
   #  return '<img src="%(path)s" title="%(title)s" alt="%(alt)s" />' % {

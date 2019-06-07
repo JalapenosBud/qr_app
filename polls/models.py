@@ -12,7 +12,6 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from QRCODE.settings import BASE_DIR
 
-
 class WeblinkModel(models.Model):
     weblink = models.CharField(max_length = 250, null=True)
     # LAV EN FORM FOR ID SOM I KAN KALDE PÅ!
@@ -72,3 +71,4 @@ def generate(input):
 
         #kasper
         #img.save("C:\\Users\\Jalap\\Skynet\\qr_app\\qr_app\\media\\code.png")
+
