@@ -3,6 +3,7 @@ import vobject
 import pyqrcode
 import png
 
+from django.core import serializers
 from django.shortcuts import render
 from pathlib import Path
 from .models import SmsModel, WifiModel, WeblinkModel
@@ -12,6 +13,7 @@ from django.core.files.base import ContentFile
 from django.http import HttpResponseBadRequest
 from QRCODE.settings import BASE_DIR
 
+from django.forms.models import modelform_factory
 from django.template.loader import TemplateDoesNotExist
 
 from django.http import HttpResponse, Http404
@@ -29,28 +31,20 @@ def weblink(request):
         if request.method == 'POST':
                 if '_load' in request.POST:
                         try:
-                                web = WeblinkModel.objects.all().first()
+                                web = WeblinkModel.objects.all().last()
                         except:
                                 raise Http404('Requested weblink model not found')
                         context = {'weblink':web}
                         return render(request, 'polls/weblink.html', context)
-
                 if '_generate' in request.POST:
                         model = WeblinkModel()
                         model.create(request.POST["weblink"])# model.weblink = request.POST["weblink"]# database save
                         model.save()# load methode kaldes her()
                         return render(request, 'polls/weblink.html')
-                        
+                if '_save' in request.POST:
+                        data = serializers.serialize('json', WeblinkModel.objects.all())
                 return render(request, 'polls/weblink.html')    
         return HttpResponseBadRequest()
-
-def loadWeblink(request):
-        if request.method == 'GET':
-                print("HET")
-                #model = WeblinkModel()
-                #model.load("loadfile")
-                return render(request, "polls/getone.html")
-
 
 def wifi(request):
         if request.method == 'GET':
@@ -69,7 +63,16 @@ def sms(request):
         if request.method == 'GET':
                 return render(request, "polls/sms.html")
 
-        if request.method == 'POST':
+        if request.POST:
+                if '_load' in request.POST:
+                        try:
+                                sms = SmsModel.objects.all().last()
+                        except:
+                                raise Http404('Requested sms model not found')
+                        context = {'textmessage': sms.textmessage,
+                                'number': sms.number}
+                        print(sms)
+                        return render(request, 'polls/sms.html', context)
                 model = SmsModel()
                 model.create(request.POST['textmessage'],request.POST['number'])
                 #model.wifi = request.POST["sms"]
@@ -98,20 +101,3 @@ def showImage(request):
     #    'title': image.title,
      #   'alt': image.alt_text
    # }     
-
-
-#def user_page(request, username):
-     #   try:
-      # #         user = User.objects.get(username = username)
-      #  except:
-      #          raise Http404('Requested user not found.')
-##
-      ##  product = user.product_set.all()
-       # template = get_template('user_page.html')
-       # variables = Context({
-        #        'username': username,
-        #        'product': product
-     #   })
-       # output = template.render(variables)
-      #  return HttpResponse(output)
-

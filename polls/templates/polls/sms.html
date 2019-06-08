@@ -4,10 +4,11 @@
 
     <form action="." method="post">{% csrf_token %}
         <label>Sms Number:</label>
-        <input class="form-control" type="textarea" name="number" style="width: 30%"></input>
+        <input class="form-control" type="textarea" name="number" value="{{number}}" style="width: 30%"></input>
         <label>Sms text:</label>
-        <input class="form-control" type="textarea" name="textmessage" style="width: 30%"></input>
-        <button type="submit">Submit</button>
+        <input class="form-control" type="textarea" name="textmessage" value="{{textmessage}}" style="width: 30%"></input>
+        <button type="submit" name="_generate">Generate</button>
+        <button type="submit" name="_load">Load</button>
     </form>
 <img src="/media/code.png">
 </div>
