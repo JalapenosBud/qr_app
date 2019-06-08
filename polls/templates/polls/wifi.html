@@ -4,12 +4,13 @@
 
     <form action="." method="post">{% csrf_token %}
         <label>Wifi Name:</label>
-        <input class="form-control" type="text" name="wifi-name" style="width: 30%"></input>
+        <input class="form-control" type="text" name="wifi-name" value="{{wifiname}}" style="width: 30%"></input>
         <label>Wifi protocol:</label>
-        <input class="form-control" type="text" name="wifi-auth" style="width: 30%"></input>
+        <input class="form-control" type="text" name="wifi-auth" value="{{wifiauth}}" style="width: 30%"></input>
         <label>wifi password:</label>
-        <input class="form-control" type="text" name="wifi-pass" style="width: 30%"></input>
-        <button type="submit">Generate</button>
+        <input class="form-control" type="text" name="wifi-pass" value="{{wifipass}}" style="width: 30%"></input>
+        <button type="submit" name="_generate">Generate</button>
+        <button type="submit" name="_load">Load</button>
     </form>
     <img src="/media/code.png">
 </div>

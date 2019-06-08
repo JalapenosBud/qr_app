@@ -49,13 +49,23 @@ def weblink(request):
 def wifi(request):
         if request.method == 'GET':
                 return render(request, "polls/wifi.html")
-
-        if request.method == 'POST':
-                model = WifiModel()
-                model.create(request.POST["wifi-name"], request.POST["wifi-pass"],request.POST["wifi-auth"])
-                #model.wifi = request.POST["wifi"]
-                model.save()
-                return render(request, 'polls/wifi.html')
+        
+        if request.POST:
+                if '_load' in request.POST:
+                        try:
+                                wifi = WifiModel.objects.all().last()
+                        except:
+                                raise Http404('Requested wifi model not found')
+                        context = {'wifiname': wifi.wifiName,
+                                   'wifipass': wifi.wifiPass,
+                                   'wifiauth': wifi.wifiAuth}
+                        return render(request, 'polls/wifi.html', context)
+                if '_generate' in request.POST:
+                        model = WifiModel()
+                        model.create(request.POST["wifi-name"], request.POST["wifi-pass"],request.POST["wifi-auth"])
+                        #model.wifi = request.POST["wifi"]
+                        model.save()
+                        return render(request, 'polls/wifi.html')                
         return HttpResponseBadRequest() 
 
 
@@ -71,14 +81,14 @@ def sms(request):
                                 raise Http404('Requested sms model not found')
                         context = {'textmessage': sms.textmessage,
                                 'number': sms.number}
-                        print(sms)
+                        #print(sms)
                         return render(request, 'polls/sms.html', context)
-                model = SmsModel()
-                model.create(request.POST['textmessage'],request.POST['number'])
-                #model.wifi = request.POST["sms"]
-                model.save()
-                return render(request,'polls/sms.html')
-        
+                if '_generate' in request.POST:
+                        model = SmsModel()
+                        model.create(request.POST['textmessage'],request.POST['number'])
+                        #model.wifi = request.POST["sms"]
+                        model.save()
+                        return render(request,'polls/sms.html')        
         return HttpResponseBadRequest() 
 
 
