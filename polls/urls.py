@@ -9,6 +9,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('weblink/', views.weblink, name='weblink'),
     path('sms/', views.sms, name='sms'),
-    path('wifi/', views.wifi, name='wifi'),
-    path('getone/<str:type>/<str:id>/', views.getOne, name='getone')
+    path('wifi/', views.wifi, name='wifi')
 ]

@@ -1,23 +1,15 @@
 import os
-import vobject
 import pyqrcode
 import png
+import json
 
 from django.core import serializers
 from django.shortcuts import render
 from pathlib import Path
 from .models import SmsModel, WifiModel, WeblinkModel
-from django.core.files.storage import default_storage
 from django.shortcuts import render, get_object_or_404
-from django.core.files.base import ContentFile
-from django.http import HttpResponseBadRequest
-from QRCODE.settings import BASE_DIR
-
-from django.forms.models import modelform_factory
-from django.template.loader import TemplateDoesNotExist
-
-from django.http import HttpResponse, Http404
-from .models import WeblinkModel
+from django.http import HttpResponse, Http404,HttpResponseBadRequest
+from django.forms.models import model_to_dict
 
 def index(request):
     #context = {}
@@ -38,11 +30,28 @@ def weblink(request):
                         return render(request, 'polls/weblink.html', context)
                 if '_generate' in request.POST:
                         model = WeblinkModel()
-                        model.create(request.POST["weblink"])# model.weblink = request.POST["weblink"]# database save
-                        model.save()# load methode kaldes her()
+                        model.create(request.POST["weblink"])
+                        model.save()
                         return render(request, 'polls/weblink.html')
                 if '_save' in request.POST:
-                        data = serializers.serialize('json', WeblinkModel.objects.all())
+                        pass
+                       # model = WeblinkModel()
+                      #  model.create(request.POST["weblink"])
+                       # data = WeblinkModel.objects.all()
+
+                        #for item in data:
+                        #        item['weblink'] = model_to_dict(item['weblink'])
+
+                       # return HttpResponse(json.dumps(data), mimetype='application/json')
+
+                       # with open(r'C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\file.json', "w") as out:
+                                #mast_point = serializers.serialize("json", model)
+                                #out.write(mast_point)
+                                #json.dump(model,out)
+                        #context = {'object': model}
+                        #savefile(request, SmsModel, 'polls/weblink.html')
+                        #data = serializers.serialize('json', WeblinkModel.objects.all())
+                        #return render(request, 'polls/weblink.html')  
                 return render(request, 'polls/weblink.html')    
         return HttpResponseBadRequest()
 
@@ -63,7 +72,6 @@ def wifi(request):
                 if '_generate' in request.POST:
                         model = WifiModel()
                         model.create(request.POST["wifi-name"], request.POST["wifi-pass"],request.POST["wifi-auth"])
-                        #model.wifi = request.POST["wifi"]
                         model.save()
                         return render(request, 'polls/wifi.html')                
         return HttpResponseBadRequest() 
@@ -81,30 +89,30 @@ def sms(request):
                                 raise Http404('Requested sms model not found')
                         context = {'textmessage': sms.textmessage,
                                 'number': sms.number}
-                        #print(sms)
                         return render(request, 'polls/sms.html', context)
                 if '_generate' in request.POST:
                         model = SmsModel()
                         model.create(request.POST['textmessage'],request.POST['number'])
-                        #model.wifi = request.POST["sms"]
                         model.save()
                         return render(request,'polls/sms.html')        
         return HttpResponseBadRequest() 
-
-
-def getOne(request, type, id):
-        #jeres detaljer er her omkring den specfikke QR Code.
-        qr = get_object_or_404(type, pk=id)
-        if request.method == 'GET':
-                context = {"qr": qr, "type": type}
-                #"getone.html" er ikke lavet men den skal udfylde 
-                return render(request, "polls/getone.html", context)
 
 def showImage(request):
         link = "C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png"
         if request.method == 'GET':
                 pass
 
+
+
+def savefile(request, model, templatestring):
+    objects = model.objects.all()
+    with open(r'C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\file.json', "w") as out:
+        mast_point = serializers.serialize("json", objects)
+        out.write(mast_point)
+    template = loader.get_template(templatestring)
+    context = {'object': objects}
+    return HttpResponse(template.render(context, request))
+    
 #def image_to_html(image):
   #  return '<img src="%(path)s" title="%(title)s" alt="%(alt)s" />' % {
      #   'path': image.raw.path,
