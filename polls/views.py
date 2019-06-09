@@ -11,6 +11,9 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404,HttpResponseBadRequest
 from django.forms.models import model_to_dict
 from pprint import pprint
+
+from django.core.files.storage import FileSystemStorage
+
 def index(request):
     #context = {}
     return render(request, 'polls/index.html')
@@ -88,7 +91,7 @@ def wifi(request):
                 
                         context = {'object': model}
                         return render(request, 'polls/wifi.html') 
-                        
+
                 if '_populate' in request.POST:
                         with open('data.json') as data_file:
                                 somedata = json.loads(data_file.read())
@@ -100,7 +103,13 @@ def wifi(request):
                         context = {'wifiname': wifiname,
                                    'wifiauth': wifiprotocol,
                                    'wifipass': wifipass}
-                        return render(request, 'polls/wifi.html',context)                
+                        return render(request, 'polls/wifi.html',context) 
+
+                if '_upload_file' in request.POST:
+                        uploaded_file = request.FILES['document']
+                        fs = FileSystemStorage()
+                        fs.save(uploaded_file.name, uploaded_file)
+                return render(request, 'polls/wifi.html')
         return HttpResponseBadRequest() 
 
 
@@ -123,31 +132,3 @@ def sms(request):
                         model.save()
                         return render(request,'polls/sms.html')        
         return HttpResponseBadRequest() 
-
-def showImage(request):
-        link = "C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png"
-        if request.method == 'GET':
-                pass
-
-
-
-def savefile(request, model, templatestring):
-    objects = model.objects.all()
-    with open(r'C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\file.json', "w") as out:
-        mast_point = serializers.serialize("json", objects)
-        out.write(mast_point)
-    template = loader.get_template(templatestring)
-    context = {'object': objects}
-    return HttpResponse(template.render(context, request))
-    
-#def image_to_html(image):
-  #  return '<img src="%(path)s" title="%(title)s" alt="%(alt)s" />' % {
-     #   'path': image.raw.path,
-    #    'title': image.title,
-     #   'alt': image.alt_text
-   # }     
-
-def set_default(obj):
-    if isinstance(obj, set):
-        return list(obj)
-    raise TypeError

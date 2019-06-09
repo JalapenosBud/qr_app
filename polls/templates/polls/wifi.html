@@ -2,7 +2,7 @@
 
 <div style="padding: 70px;">
 
-    <form action="." method="post">{% csrf_token %}
+    <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
         <label>Wifi Name:</label>
         <input class="form-control" type="text" name="wifi-name" value="{{wifiname}}" style="width: 30%"></input>
         <label>Wifi protocol:</label>
@@ -13,6 +13,9 @@
         <button type="submit" name="_load">Load</button>
         <button type="submit" value="SaveToFile" name="_save">Save to file</button>
         <button type="submit" value="PopulateField" name="_populate">Load to field</button>
+        
+        <input type="file" name="document">
+        <button type="submit" name="_upload_file">Upload file</button>
     </form>
     <img src="/media/code.png">
 </div>
