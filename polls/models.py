@@ -20,7 +20,7 @@ class WeblinkModel(models.Model):
 
     def create(self, _weblink):
         self.weblink = _weblink
-        generate(_weblink)
+        #generate(_weblink)
         
 
     def __str__(self):
@@ -35,8 +35,8 @@ class WifiModel(models.Model):
         self.wifiName = _wifiname
         self.wifiPass = _wifipass
         self.wifiAuth = _wifiauth
-        userInput = f"WIFI:T:{_wifiauth};S:{_wifiname};P:{_wifipass};;"
-        generate(userInput)
+        #userInput = f"WIFI:T:{_wifiauth};S:{_wifiname};P:{_wifipass};;"
+        #generate(userInput)
 
     def __str__(self):
         return self.wifiName + ' ' + self.wifiPass + ' ' + self.wifiAuth
@@ -49,8 +49,8 @@ class SmsModel(models.Model):
     def create(self, _textmessage, _number):
         self.textmessage = _textmessage
         self.number = _number
-        userInput = F'sms:{_number}:{_textmessage}.'
-        generate(userInput)
+        #userInput = F'sms:{_number}:{_textmessage}.'
+        #generate(userInput)
 
     def __str__(self):
         return self.textmessage + ' ' + self.number
