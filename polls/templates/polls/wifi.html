@@ -1,17 +1,23 @@
 {% include 'polls/base.html' %}
 <script type="text/javascript">
     function showImage(){
-        document.getElementById('loadingImage').style.visibility="visible";}
+        document.getElementById('loadingImage').style.visibility="visible";
+    }
 </script>
 
 <div style="padding: 70px;">
 
-    <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
-        <label>Wifi Name:</label>
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Wi-Fi Name:</label>
         <input class="form-control" type="text" name="wifi-name" value="{{wifiname}}" style="width: 30%"></input>
-        <label>Wifi protocol:</label>
-        <input class="form-control" type="text" name="wifi-auth" value="{{wifiauth}}" style="width: 30%"></input>
-        <label>wifi password:</label>
+        <label>Wi-Fi Protocol:</label>
+        <select style="width: 30%" type="text" name="wifi-auth" class="form-control" value="{{wifiauth}}">
+            <option selected hidden="selected">{{wifiauth}}</option>
+            <option>WPA</option>
+            <option>WPA2</option>
+        </select>
+        <label>Wi-Fi Password:</label>
         <input class="form-control" type="text" name="wifi-pass" value="{{wifipass}}" style="width: 30%"></input>
         <br>
         <button name="_generate_save"    type="submit">Generate/Save</button>

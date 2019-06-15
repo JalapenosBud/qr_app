@@ -8,9 +8,9 @@
 
     <form action="." method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <label>Sms Number:</label>
+        <label>SMS Number:</label>
         <input class="form-control" type="textarea" name="number" value="{{number}}" style="width: 30%"></input>
-        <label>Sms text:</label>
+        <label>SMS Text:</label>
         <input class="form-control" type="textarea" name="textmessage" value="{{textmessage}}" style="width: 30%"></input>
         <br>
         <button name="_generate_save"    type="submit">Generate/Save</button>

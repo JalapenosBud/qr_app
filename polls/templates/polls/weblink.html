@@ -9,7 +9,7 @@
 
     <form action="." method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <label>WEBLINK:</label>
+        <label>Weblink:</label>
         <input class="form-control" type="text" name="weblink" value="{{weblink}}"style="width: 30%"></input>
         <br>
         <button name="_generate_save"        type="submit">Generate/Save</button>

@@ -1,6 +1,5 @@
 import os
 import png
-#import pyqrcode
 import qrcode
 
 from django.db import models

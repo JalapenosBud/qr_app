@@ -1,21 +1,14 @@
 import os
-#import pyqrcode
 import png
 import json
-#import io
-#import sys
 
-#from django.core import serializers
 from pathlib import Path
 from .models import SmsModel, WifiModel, WeblinkModel, generate
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404,HttpResponseBadRequest
 from django.forms.models import model_to_dict
-#from pprint import pprint
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-#from django.core.files.storage import FileSystemStorage
-
 
 def index(request):
     return render(request, 'polls/index.html')
@@ -33,7 +26,6 @@ def weblink(request):
 
                         context = {'weblink': weblink.weblink}
                         return render(request, 'polls/weblink.html',context) 
-
 
                 if '_generate_save' in request.POST:
                         generate(request.POST["weblink"])
@@ -57,7 +49,6 @@ def weblink(request):
                                 'weblink': weblink
                         }
                 return render(request, 'polls/weblink.html',context)
-
         return HttpResponseBadRequest()
 
 def wifi(request):
@@ -83,11 +74,9 @@ def wifi(request):
                         
                         model = WifiModel()
 
-                        userInput = f"WIFI:T:{_wifiauth};S:{_wifiname};P:{_wifipass};;"
-                        generate(userInput) 
+                        generate(f"WIFI:T:{_wifiauth};S:{_wifiname};P:{_wifipass};;") 
                 
                         #MODEL CREATION
-                        
                         model.create(_wifiname, _wifiauth, _wifipass)
                         model.save()
 
