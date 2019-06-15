@@ -1,19 +1,26 @@
 {% include 'polls/base.html' %}
+<script type="text/javascript">
+    function showImage(){
+        document.getElementById('loadingImage').style.visibility="visible";}
+</script>
 
 <div style="padding: 70px;">
 
-    <form action="." method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         <label>Sms Number:</label>
         <input class="form-control" type="textarea" name="number" value="{{number}}" style="width: 30%"></input>
         <label>Sms text:</label>
         <input class="form-control" type="textarea" name="textmessage" value="{{textmessage}}" style="width: 30%"></input>
         <br>
-        <button name="_generate"    type="submit">Generate</button>
-        <button name="_save"        type="submit">Save</button>
+        <button name="_generate_save"    type="submit">Generate/Save</button>
         <button name="_load"        type="submit">Load</button>
         <br>
         <input type="file" name="document">
         <button name="_upload"      type="submit">Upload</button>
+        <br>          
+        <input type="button" value="Show QR Code" onclick="showImage();"/>
+        <br>
+        <img id="loadingImage" src="/media/code.png" style="visibility:hidden"/>
     </form>
-<img src="/media/code.png">
 </div>

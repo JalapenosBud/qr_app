@@ -1,15 +1,9 @@
-import qrcode
-from django.db import models
-
 import os
-import vobject
-import pyqrcode
 import png
+#import pyqrcode
+import qrcode
 
-from django.shortcuts import render
-from pathlib import Path
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+from django.db import models
 from QRCODE.settings import BASE_DIR
 
 class WeblinkModel(models.Model):

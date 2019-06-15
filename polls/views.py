@@ -1,22 +1,20 @@
 import os
-import pyqrcode
+#import pyqrcode
 import png
 import json
-import io
-import sys
-import base64
+#import io
+#import sys
 
-from django.core import serializers
-from django.shortcuts import render
+#from django.core import serializers
 from pathlib import Path
 from .models import SmsModel, WifiModel, WeblinkModel, generate
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404,HttpResponseBadRequest
 from django.forms.models import model_to_dict
-from pprint import pprint
+#from pprint import pprint
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.core.files.storage import FileSystemStorage
+#from django.core.files.storage import FileSystemStorage
 
 
 def index(request):
@@ -37,33 +35,36 @@ def weblink(request):
                         return render(request, 'polls/weblink.html',context) 
 
 
-                if '_save' in request.POST:
+                if '_generate_save' in request.POST:
                         generate(request.POST["weblink"])
                         model = WeblinkModel()
                         model.create(request.POST["weblink"])
                         model.save()
 
-                        dict_obj = model_to_dict(model)
-
                         with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\weblinkdata.json', 'w') as outfile:
-                                json.dump(dict_obj, outfile)
+                                json.dump(model_to_dict(model), outfile)
                 
-                        context = {'object': model}
-                if '_upload' in request.POST:
+                        context = {
+                                'object': model
+                        }
 
+                if '_upload' in request.POST:
                         json_file = request.FILES['document']
                         bytestream = json_file.read()
                         data = json.loads(bytestream)
                         weblink = data['weblink']
-                        context = {'weblink': weblink}
-                return render(request, 'polls/weblink.html',context)    
+                        context = {
+                                'weblink': weblink
+                        }
+                return render(request, 'polls/weblink.html',context)
+
         return HttpResponseBadRequest()
 
 def wifi(request):
         if request.method == 'GET':
                 return render(request, "polls/wifi.html")
         
-        if request.POST:
+        if request.method == "POST":
                 if '_load' in request.POST:
                         try:
                                 WiFi = WifiModel.objects.all().last()
@@ -75,29 +76,25 @@ def wifi(request):
                                 'wifipass': WiFi.wifiPass}
                         return render(request, 'polls/wifi.html',context) 
 
-                if '_generate' in request.POST:
+                if '_generate_save' in request.POST:
                         _wifiauth = request.POST["wifi-auth"]
                         _wifiname = request.POST["wifi-name"]
                         _wifipass = request.POST["wifi-pass"]
+                        
+                        model = WifiModel()
 
                         userInput = f"WIFI:T:{_wifiauth};S:{_wifiname};P:{_wifipass};;"
-                        generate(userInput)
-
-                        return render(request, 'polls/wifi.html') 
+                        generate(userInput) 
                 
-                if '_save' in request.POST:
                         #MODEL CREATION
-                        model = WifiModel()
-                        model.create(request.POST["wifi-name"], request.POST["wifi-auth"],request.POST["wifi-pass"])
+                        
+                        model.create(_wifiname, _wifiauth, _wifipass)
                         model.save()
 
                         #MAKE MODEL INTO DICT
-                        dict_obj = model_to_dict(model)
-
                         with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\wifidata.json', 'w') as outfile:
-                                json.dump(dict_obj, outfile)
+                                json.dump(model_to_dict(model), outfile)
                 
-                        context = {'object': model}
                         return render(request, 'polls/wifi.html') 
 
                 if '_upload' in request.POST:
@@ -120,36 +117,32 @@ def sms(request):
         if request.method == 'GET':
                 return render(request, "polls/sms.html")
 
-        if request.POST:
+        if request.method == "POST":
                 if '_load' in request.POST:
                         try:
                                 sms = SmsModel.objects.all().last()
                         except:
                                 raise Http404('Requested sms model not found')
-                        context = {'textmessage': sms.textmessage,
-                                'number': sms.number}
+                        context = {
+                                'textmessage': sms.textmessage,
+                                'number': sms.number
+                        }
                         return render(request, 'polls/sms.html', context)
 
-                if '_save' in request.POST:
+                if '_generate_save' in request.POST:
                         #MODEL CREATION
                         model = SmsModel()
                         model.create(request.POST["textmessage"], request.POST["number"])
                         model.save()
 
                         #MAKE MODEL INTO DICT
-                        dict_obj = model_to_dict(model)
                         with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\smsdata.json', 'w') as outfile:
-                                json.dump(dict_obj, outfile)
+                                json.dump(model_to_dict(model), outfile)
                 
-                        context = {'object': model}
-                        return render(request, 'polls/sms.html') 
-
-                if '_generate' in request.POST:
                         _textmessage = request.POST["textmessage"]
                         _number = request.POST["number"]
-
-                        userInput = F'sms:{_number}:{_textmessage}.'
-                        generate(userInput)
+ 
+                        generate(F'sms:{_number}:{_textmessage}.')
                         return render(request, 'polls/sms.html') 
 
                 if '_upload' in request.POST:
@@ -162,5 +155,6 @@ def sms(request):
                         _number = data['number']
                         context = {'textmessage': _textmessage,
                                 'number': _number}
+                        #return render(request, 'polls/sms.html', context)
                 return render(request, 'polls/sms.html', context)
         return HttpResponseBadRequest() 
