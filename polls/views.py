@@ -20,9 +20,7 @@ from django.core.files.storage import FileSystemStorage
 
 
 def index(request):
-    #context = {}
     return render(request, 'polls/index.html')
-    
     
 def weblink(request):
         if request.method == 'GET':
@@ -38,18 +36,16 @@ def weblink(request):
                         context = {'weblink': weblink.weblink}
                         return render(request, 'polls/weblink.html',context) 
 
-                if '_generate' in request.POST:
-                        generate(request.POST["weblink"])
-                        return render(request, 'polls/weblink.html')
 
                 if '_save' in request.POST:
+                        generate(request.POST["weblink"])
                         model = WeblinkModel()
                         model.create(request.POST["weblink"])
                         model.save()
 
                         dict_obj = model_to_dict(model)
 
-                        with open('C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\weblinkdata.json', 'w') as outfile:
+                        with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\weblinkdata.json', 'w') as outfile:
                                 json.dump(dict_obj, outfile)
                 
                         context = {'object': model}
@@ -92,13 +88,13 @@ def wifi(request):
                 if '_save' in request.POST:
                         #MODEL CREATION
                         model = WifiModel()
-                        model.create(request.POST["wifi-name"], request.POST["wifi-pass"],request.POST["wifi-auth"])
+                        model.create(request.POST["wifi-name"], request.POST["wifi-auth"],request.POST["wifi-pass"])
                         model.save()
 
                         #MAKE MODEL INTO DICT
                         dict_obj = model_to_dict(model)
 
-                        with open('C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\wifidata.json', 'w') as outfile:
+                        with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\wifidata.json', 'w') as outfile:
                                 json.dump(dict_obj, outfile)
                 
                         context = {'object': model}
@@ -111,8 +107,8 @@ def wifi(request):
                         data = json.loads(bytestream)
                         
                         wifiname =     data['wifiName']
-                        wifiprotocol = data['wifiPass']
-                        wifipass =     data['wifiAuth']
+                        wifiprotocol = data['wifiAuth']
+                        wifipass =     data['wifiPass']
                         context = {'wifiname': wifiname,
                                    'wifiauth': wifiprotocol,
                                    'wifipass': wifipass}
@@ -142,7 +138,7 @@ def sms(request):
 
                         #MAKE MODEL INTO DICT
                         dict_obj = model_to_dict(model)
-                        with open('C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\smsdata.json', 'w') as outfile:
+                        with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\smsdata.json', 'w') as outfile:
                                 json.dump(dict_obj, outfile)
                 
                         context = {'object': model}
