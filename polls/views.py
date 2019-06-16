@@ -33,7 +33,7 @@ def weblink(request):
                         model.create(request.POST["weblink"])
                         model.save()
 
-                        with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\weblinkdata.json', 'w') as outfile:
+                        with open("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png", 'w') as outfile:
                                 json.dump(model_to_dict(model), outfile)
                 
                         context = {
@@ -81,7 +81,7 @@ def wifi(request):
                         model.save()
 
                         #MAKE MODEL INTO DICT
-                        with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\wifidata.json', 'w') as outfile:
+                        with open("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png", 'w') as outfile:
                                 json.dump(model_to_dict(model), outfile)
                 
                         return render(request, 'polls/wifi.html') 
@@ -125,7 +125,7 @@ def sms(request):
                         model.save()
 
                         #MAKE MODEL INTO DICT
-                        with open('C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\smsdata.json', 'w') as outfile:
+                        with open("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png", 'w') as outfile:
                                 json.dump(model_to_dict(model), outfile)
                 
                         _textmessage = request.POST["textmessage"]
