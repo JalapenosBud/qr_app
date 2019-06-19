@@ -30,15 +30,17 @@ class WifiModel(models.Model):
 
 
 class SmsModel(models.Model):
-    textmessage = models.CharField(max_length = 26)
     number = models.CharField(max_length=8)
+    textmessage = models.CharField(max_length = 250)
+    
 
-    def create(self, _textmessage, _number):
-        self.textmessage = _textmessage
+    def create(self, _number, _textmessage):
         self.number = _number
+        self.textmessage = _textmessage
+        
 
     def __str__(self):
-        return self.textmessage + ' ' + self.number
+        return self.number + ' ' + self.textmessage 
 
 
 def generate(input):
@@ -52,8 +54,8 @@ def generate(input):
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
         #angelo
-        img.save("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png")
+        #img.save("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png")
 
         #kasper
-        #img.save("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\code.png")
+        img.save("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\code.png")
             

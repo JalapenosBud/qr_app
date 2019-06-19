@@ -22,7 +22,7 @@ from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    path('', include('polls.urls')),
+    path('', include('qr_app.urls')),
     path('admin/', admin.site.urls),
 ]
 

@@ -2,6 +2,8 @@ from django.test import RequestFactory,TestCase
 from .models import WeblinkModel, SmsModel, WifiModel, generate
 from .views import weblink, sms, wifi, index
 # Create your tests here.
+# coverage run manage.py test
+# coverage report -m
 
 class SimpleTest(TestCase):
 
@@ -40,12 +42,12 @@ class SimpleTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_wifi_view(self):
-        request = self.factory.get('wifi')
+        request = self.factory.get('/wifi')
         response = wifi(request)
         self.assertEqual(response.status_code, 200)
 
     def test_sms_view(self):
-        request = self.factory.get('sms')
+        request = self.factory.get('/sms')
         response = sms(request)
         self.assertEqual(response.status_code, 200)
 

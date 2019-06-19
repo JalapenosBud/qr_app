@@ -11,11 +11,11 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 def index(request):
-    return render(request, 'polls/index.html')
+    return render(request, 'qr_app/index.html')
     
 def weblink(request):
         if request.method == 'GET':
-                return render(request, "polls/weblink.html")
+                return render(request, "qr_app/weblink.html")
 
         if request.method == 'POST':
                 if '_load' in request.POST:
@@ -25,7 +25,7 @@ def weblink(request):
                                 raise Http404('Requested wifi model not found')
 
                         context = {'weblink': weblink.weblink}
-                        return render(request, 'polls/weblink.html',context) 
+                        return render(request, 'qr_app/weblink.html',context) 
 
                 if '_generate_save' in request.POST:
                         generate(request.POST["weblink"])
@@ -33,7 +33,7 @@ def weblink(request):
                         model.create(request.POST["weblink"])
                         model.save()
 
-                        with open("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png", 'w') as outfile:
+                        with open("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\weblinkdata.json", 'w') as outfile:
                                 json.dump(model_to_dict(model), outfile)
                 
                         context = {
@@ -48,12 +48,12 @@ def weblink(request):
                         context = {
                                 'weblink': weblink
                         }
-                return render(request, 'polls/weblink.html',context)
+                return render(request, 'qr_app/weblink.html',context)
         return HttpResponseBadRequest()
 
 def wifi(request):
         if request.method == 'GET':
-                return render(request, "polls/wifi.html")
+                return render(request, "qr_app/wifi.html")
         
         if request.method == "POST":
                 if '_load' in request.POST:
@@ -65,7 +65,7 @@ def wifi(request):
                         context = {'wifiname': WiFi.wifiName,
                                 'wifiauth': WiFi.wifiAuth,
                                 'wifipass': WiFi.wifiPass}
-                        return render(request, 'polls/wifi.html',context) 
+                        return render(request, 'qr_app/wifi.html',context) 
 
                 if '_generate_save' in request.POST:
                         _wifiauth = request.POST["wifi-auth"]
@@ -73,7 +73,6 @@ def wifi(request):
                         _wifipass = request.POST["wifi-pass"]
                         
                         model = WifiModel()
-
                         generate(f"WIFI:T:{_wifiauth};S:{_wifiname};P:{_wifipass};;") 
                 
                         #MODEL CREATION
@@ -81,10 +80,10 @@ def wifi(request):
                         model.save()
 
                         #MAKE MODEL INTO DICT
-                        with open("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png", 'w') as outfile:
+                        with open("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\wifidata.json", 'w') as outfile:
                                 json.dump(model_to_dict(model), outfile)
                 
-                        return render(request, 'polls/wifi.html') 
+                        return render(request, 'qr_app/wifi.html') 
 
                 if '_upload' in request.POST:
                         json_file = request.FILES['document']
@@ -98,13 +97,13 @@ def wifi(request):
                         context = {'wifiname': wifiname,
                                    'wifiauth': wifiprotocol,
                                    'wifipass': wifipass}
-                return render(request, 'polls/wifi.html', context)
+                return render(request, 'qr_app/wifi.html', context)
         return HttpResponseBadRequest() 
 
 
 def sms(request):
         if request.method == 'GET':
-                return render(request, "polls/sms.html")
+                return render(request, "qr_app/sms.html")
 
         if request.method == "POST":
                 if '_load' in request.POST:
@@ -116,23 +115,23 @@ def sms(request):
                                 'textmessage': sms.textmessage,
                                 'number': sms.number
                         }
-                        return render(request, 'polls/sms.html', context)
+                        return render(request, 'qr_app/sms.html', context)
 
                 if '_generate_save' in request.POST:
                         #MODEL CREATION
                         model = SmsModel()
-                        model.create(request.POST["textmessage"], request.POST["number"])
+                        model.create(request.POST["number"], request.POST["textmessage"])
                         model.save()
 
                         #MAKE MODEL INTO DICT
-                        with open("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png", 'w') as outfile:
+                        with open("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\smsdata.json", 'w') as outfile:
                                 json.dump(model_to_dict(model), outfile)
                 
                         _textmessage = request.POST["textmessage"]
                         _number = request.POST["number"]
  
                         generate(F'sms:{_number}:{_textmessage}.')
-                        return render(request, 'polls/sms.html') 
+                        return render(request, 'qr_app/sms.html') 
 
                 if '_upload' in request.POST:
                         json_file = request.FILES['document']
@@ -144,6 +143,6 @@ def sms(request):
                         _number = data['number']
                         context = {'textmessage': _textmessage,
                                 'number': _number}
-                        #return render(request, 'polls/sms.html', context)
-                return render(request, 'polls/sms.html', context)
+                        
+                return render(request, 'qr_app/sms.html', context)
         return HttpResponseBadRequest() 
