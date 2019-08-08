@@ -54,8 +54,8 @@ def generate(input):
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
         #angelo
-        #img.save("C:\\Users\\Jalap\\Desktop\\qr\\qr_app\\media\\code.png")
+        #img.save("C:\\Users\\Jalap\\Desktop\\qr\\qr_project\\media\\code.png")
 
         #kasper
-        img.save("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_app\\media\\code.png")
+        img.save("C:\\Users\\Skynet\\Desktop\\QR_app\\qr_project\\media\\code.png")
             
